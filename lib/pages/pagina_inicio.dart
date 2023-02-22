@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:precios/pages/page2.dart';
 
 class PaginaInicio extends StatelessWidget {
   const PaginaInicio({super.key});
@@ -6,22 +7,31 @@ class PaginaInicio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Center(
         
-        color: Colors.red,
-        child: Column(        
+        
+        child: Row(        
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           // ignore: prefer_const_literals_to_create_immutables
           children: [
-            const Text("INICIO"),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Page2())), 
+                  child: const Text("Page 2"),),
+                const Text("INICIO"),
+              ],
+            ),  
           ],
         ),
       ),
       appBar:AppBar(
-      title: const Text("Pagina de inicio"),
-      centerTitle: true,
+        title: const Text("Pagina de inicio"),
+        centerTitle: true,
 
-    ),);
+      ),
+    );
   }
 }
