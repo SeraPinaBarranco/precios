@@ -19,7 +19,7 @@ class PaginaInicio extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Page2())), 
+                  onPressed: () => Navigator.pushNamed(context, 'page2'),
                   child: const Text("Page 2"),),
                 const Text("INICIO"),
               ],

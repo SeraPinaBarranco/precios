@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:precios/pages/page2.dart';
 import 'package:precios/pages/pagina_inicio.dart';
+import 'package:precios/provider/my_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,16 +13,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: 'pagina_inicio',
-      routes: {
-        'pagina_inicio': (context) => const PaginaInicio(),
-        'page2'        : (context) => const Page2()
-        
-      },
-      
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MyProvider())
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'pagina_inicio',
+        routes: {
+          'pagina_inicio': (context) => const PaginaInicio(),
+          'page2': (context) => const Page2()
+        },
+      ),
     );
   }
 }
