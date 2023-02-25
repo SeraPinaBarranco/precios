@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:precios/provider/my_provider.dart';
+import 'package:precios/themes/scaffold_text_style.dart';
 import 'package:provider/provider.dart';
 
 class Page2 extends StatelessWidget {
@@ -11,9 +12,11 @@ class Page2 extends StatelessWidget {
     final num = intProvider.getNumero;
     return Scaffold(
         appBar: AppBar(
+          titleTextStyle: scaffoldTheme,
           title: const Text("Pagina 2"),
           centerTitle: true,
         ),
+        
         body: Center(
           child: Column(
             children: [

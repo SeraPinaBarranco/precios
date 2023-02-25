@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => MyProvider())
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => MyProvider())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: 'pagina_inicio',
@@ -24,6 +22,21 @@ class MyApp extends StatelessWidget {
           'pagina_inicio': (context) => const PaginaInicio(),
           'page2': (context) => const Page2()
         },
+        theme: ThemeData.from(
+            
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.lime,
+              backgroundColor: Colors.grey[600],
+              accentColor:  Colors.blue,
+              cardColor:const Color.fromARGB(255, 215, 33, 243)
+            ),
+            textTheme: const TextTheme(
+                
+                bodyMedium:
+                    TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+            ),
+            
+        ),
       ),
     );
   }

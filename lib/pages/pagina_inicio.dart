@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:precios/pages/page2.dart';
+import 'package:precios/themes/scaffold_text_style.dart';
 
 class PaginaInicio extends StatelessWidget {
   const PaginaInicio({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      
       body: Center(
         
         
@@ -20,7 +23,10 @@ class PaginaInicio extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, 'page2'),
-                  child: const Text("Page 2"),),
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.white),
+                  child: const Text("Nuevo producto"),
+                ),
+
                 const Text("INICIO"),
               ],
             ),  
@@ -30,8 +36,11 @@ class PaginaInicio extends StatelessWidget {
       appBar:AppBar(
         title: const Text("Pagina de inicio"),
         centerTitle: true,
+        titleTextStyle: scaffoldTheme,
 
       ),
     );
   }
+
+  
 }
