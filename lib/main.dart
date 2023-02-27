@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
           'pagina_inicio': (context) => const PaginaInicio(),
           'page2': (context) => const Page2()
         },
-        theme: ThemeData.from(
+        theme: ThemeData(
             
             colorScheme: ColorScheme.fromSwatch(
+              
               primarySwatch: Colors.lime,
-              backgroundColor: Colors.grey[600],
+              backgroundColor: const Color.fromARGB(255, 85, 78, 78),
               accentColor:  Colors.blue,
               cardColor:const Color.fromARGB(255, 215, 33, 243)
             ),
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
                 
                 bodyMedium:
                     TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                
             ),
             
         ),

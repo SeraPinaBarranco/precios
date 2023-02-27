@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:precios/pages/page2.dart';
 import 'package:precios/themes/scaffold_text_style.dart';
 
 class PaginaInicio extends StatelessWidget {
@@ -9,7 +8,7 @@ class PaginaInicio extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         
         
@@ -23,11 +22,11 @@ class PaginaInicio extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, 'page2'),
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.white),
+                  style: ElevatedButton.styleFrom(foregroundColor: const Color.fromARGB(255, 165, 156, 156)),
                   child: const Text("Nuevo producto"),
                 ),
 
-                const Text("INICIO"),
+                
               ],
             ),  
           ],
