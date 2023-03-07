@@ -21,11 +21,21 @@ class PaginaInicio extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, 'page2'),
+                  onPressed: () => Navigator.pushNamed(context, 'productos'),
                   style: ElevatedButton.styleFrom(foregroundColor: const Color.fromARGB(255, 165, 156, 156)),
                   child: const Text("Nuevo producto"),
                 ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, 'tienda'),
+                  style: ElevatedButton.styleFrom(foregroundColor: const Color.fromARGB(255, 165, 156, 156)),
+                  child: const Text("Nuevo tienda"),
+                ),
 
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, 'tiendas'),
+                  style: ElevatedButton.styleFrom(foregroundColor: const Color.fromARGB(255, 165, 156, 156)),
+                  child: const Text("Listado de tiendas"),
+                ),
                 
               ],
             ),  

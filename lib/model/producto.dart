@@ -1,20 +1,22 @@
-class Producto {
-  final int id;
-  final String nombre;
-  final String tienda;
+import 'package:precios/model/tienda.dart';
 
-  const Producto({required this.id, required this.nombre, required this.tienda});
+class Producto {
+  final int? id;
+  final String nombre;
+  final List<Tienda> tienda;
+
+  const Producto({this.id, required this.nombre, required this.tienda});
 
   get getNombre => nombre;
-  get getTienda => tienda;
+  List<Tienda> get getTienda => tienda;
 
   set nombre(String val) {
     nombre = val;
   }
 
-  set tienda(String val) {
-    tienda = val;
-  }
+  // set tienda(Tienda val) {
+  //   tienda = val;
+  // }
 
   Map<String, dynamic> toMap() {
     return {

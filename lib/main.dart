@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:precios/pages/page2.dart';
+import 'package:precios/pages/frm_products.dart';
+import 'package:precios/pages/frm_tienda.dart';
 import 'package:precios/pages/pagina_inicio.dart';
+import 'package:precios/pages/tiendas_list.dart';
 import 'package:precios/provider/my_provider.dart';
+import 'package:precios/provider/tienda_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -14,30 +17,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => MyProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => MyProvider()),
+        ChangeNotifierProvider(create: (_)=> TiendaProvider()),
+        ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: 'pagina_inicio',
         routes: {
-          'pagina_inicio': (context) => const PaginaInicio(),
-          'page2': (context) => const Page2()
+          'pagina_inicio': (_) => const PaginaInicio(),
+          'productos': (_) => const FrmPRoductos(),
+          'tienda': (_) => const FrmTienda(),
+          'tiendas': (_) => const TiendasList()
         },
         theme: ThemeData(
-            
-            colorScheme: ColorScheme.fromSwatch(
-              
+          colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.lime,
               backgroundColor: const Color.fromARGB(255, 85, 78, 78),
-              accentColor:  Colors.blue,
-              cardColor:const Color.fromARGB(255, 215, 33, 243)
-            ),
-            textTheme: const TextTheme(
-                
-                bodyMedium:
-                    TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                
-            ),
-            
+              accentColor: Colors.blue,
+              cardColor: const Color.fromARGB(255, 215, 33, 243)),
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+          ),
         ),
       ),
     );

@@ -1,23 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:precios/model/producto.dart';
+import 'package:precios/model/tienda.dart';
+
 import 'package:precios/provider/my_provider.dart';
 import 'package:precios/themes/themes.dart';
 import 'package:precios/ui/input_decorations.dart';
 import 'package:provider/provider.dart';
 
-class Page2 extends StatefulWidget {
-  const Page2({super.key});
+import '../model/db.dart';
+
+class FrmPRoductos extends StatefulWidget {
+  const FrmPRoductos({super.key});
 
   @override
-  State<Page2> createState() => _Page2State();
+  State<FrmPRoductos> createState() => _FrmPRoductosState();
 }
 
-class _Page2State extends State<Page2> {
+class _FrmPRoductosState extends State<FrmPRoductos> {
   final _formKey = GlobalKey<FormState>();
+  List<Map<String, dynamic>> _tiendas = [];
+
+  List<String> nombreTiendas = [];
+
+  List<String> t = [];
+  String valorDrop = "";
+  int indiceTienda = -1;
+
+  void _cargarTiendas() async {
+    final data = await DB.getTiendas();
+    setState(() {
+      _tiendas = data;
+      for (var element in _tiendas) {
+        t.add(element['nombre']);
+      }
+      valorDrop = t[0];
+    });
+  }
+
+  _llenarNombreTiendas() {
+    setState(() {
+      for (var element in _tiendas) {
+        t.add(element['nombre']);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarTiendas();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final intProvider = Provider.of<MyProvider>(context);
+    //final intProvider = Provider.of<MyProvider>(context);
+
+    //t = _llenarNombreTiendas();
+
     String num = "";
 
     String? nombre, tienda;
@@ -28,7 +66,7 @@ class _Page2State extends State<Page2> {
           backgroundColor: Theme.of(context).backgroundColor,
           appBar: AppBar(
             titleTextStyle: scaffoldTheme,
-            title: const Text("Pagina 2"),
+            title: const Text("Nuevo Producto"),
             centerTitle: true,
           ),
           body: Center(
@@ -40,26 +78,45 @@ class _Page2State extends State<Page2> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "El campo no puede estar vacio!";
+                        } else {
+                          nombre = value;
                         }
-                        nombre = value;
+                        return null;
                       },
                       decoration: InputDecorations.textFormFieldID(
                           hintText: "Nombre producto",
                           labelText: "Producto",
                           prefixIcon: Icons.production_quantity_limits)),
-
                   TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "El campo no puede estar vacio!";
+                        } else {
+                          tienda = value;
                         }
-                        tienda = value;
+                        return null;
                       },
                       decoration: InputDecorations.textFormFieldID(
                           hintText: "Tienda",
                           labelText: "Tienda",
                           prefixIcon: Icons.shopify_outlined)),
-                          
+                  DropdownButton(
+                    icon: const Icon(Icons.shopify),
+                    hint: const Text("Tienda"),
+                    value: valorDrop,
+                    items: t.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                          value: value, child: Text(value));
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        indiceTienda = t.indexOf(value ?? "");
+                        
+                        valorDrop = value ?? "";
+                      });
+                    },
+                    isExpanded: true,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -69,9 +126,7 @@ class _Page2State extends State<Page2> {
 
                         //TODO Validar y mandar a base de datos
                         if (nombre != "" && tienda != "") {
-                          Producto prod =
-                              Producto(nombre: nombre!, tienda: tienda!);
-                          print(prod.getTienda);
+                          print(" ${valorDrop} - ${_tiendas[indiceTienda]['id']}");
                         }
                       }
                     },
