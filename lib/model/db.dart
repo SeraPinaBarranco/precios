@@ -13,6 +13,7 @@ class DB {
                                 "nombre"	TEXT,
                                 "tienda"	INTEGER,
                               "precio"	INTEGER,
+                              "fecha" TEXT
                               PRIMARY KEY("id" AUTOINCREMENT),
                               FOREIGN KEY("id") REFERENCES "tienda"("id")
                             )""";
@@ -22,7 +23,7 @@ class DB {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('productos.db', version: 1,
+    return sql.openDatabase('productos.db', version: 2,
         onCreate: (sql.Database database, version) async {
       await createTables(database);
     });
@@ -31,6 +32,14 @@ class DB {
   static Future<int> crearTienda(/*int? id,*/ String nombre) async {
     final db = await DB.db();
     final data = {'nombre': nombre};
+    final idR = await db.insert('tienda', data,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return idR;
+  }
+
+   static Future<int> crearProducto(String nombre, double precio, String fecha, int tienda) async {
+    final db = await DB.db();
+    final data = {'nombre': nombre, 'precio': precio, 'fecha': fecha, 'tienda': tienda};
     final idR = await db.insert('tienda', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return idR;

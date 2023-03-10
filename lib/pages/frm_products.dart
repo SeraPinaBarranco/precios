@@ -25,6 +25,10 @@ class _FrmPRoductosState extends State<FrmPRoductos> {
   String valorDrop = "";
   int indiceTienda = -1;
 
+  String? nombre, tienda;
+  int idTienda = -1;
+  double precio = 0.0;
+
   void _cargarTiendas() async {
     final data = await DB.getTiendas();
     setState(() {
@@ -58,7 +62,7 @@ class _FrmPRoductosState extends State<FrmPRoductos> {
 
     String num = "";
 
-    String? nombre, tienda;
+    
 
     return Form(
       key: _formKey,
@@ -74,6 +78,7 @@ class _FrmPRoductosState extends State<FrmPRoductos> {
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: Column(
                 children: [
+                  //CAMPO NOMBRE
                   TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -87,19 +92,24 @@ class _FrmPRoductosState extends State<FrmPRoductos> {
                           hintText: "Nombre producto",
                           labelText: "Producto",
                           prefixIcon: Icons.production_quantity_limits)),
+
+                  //CAMPO PRECIO
                   TextFormField(
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "El campo no puede estar vacio!";
                         } else {
-                          tienda = value;
+                          precio = double.parse(value);
                         }
                         return null;
                       },
                       decoration: InputDecorations.textFormFieldID(
-                          hintText: "Tienda",
-                          labelText: "Tienda",
-                          prefixIcon: Icons.shopify_outlined)),
+                          hintText: "Precio",
+                          labelText: "Precio \$",
+                          prefixIcon: Icons.monetization_on)),
+
+                  //LISTADO TIENDAS
                   DropdownButton(
                     icon: const Icon(Icons.shopify),
                     hint: const Text("Tienda"),
@@ -111,30 +121,41 @@ class _FrmPRoductosState extends State<FrmPRoductos> {
                     onChanged: (String? value) {
                       setState(() {
                         indiceTienda = t.indexOf(value ?? "");
-                        
+                        print(indiceTienda);
+                        idTienda = _tiendas[indiceTienda]['id'];
+
                         valorDrop = value ?? "";
                       });
                     },
+                    style: const TextStyle(fontSize: 20, color: Colors.indigo),
                     isExpanded: true,
                   ),
+
+                  //GUARDAR DATOS
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        const snackbar =
-                            SnackBar(content: Text("Validando datos!!"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      setState(() {
+                        if (_formKey.currentState!.validate()) {
+                          const snackbar =
+                              SnackBar(content: Text("Validando datos!!"));
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
-                        //TODO Validar y mandar a base de datos
-                        if (nombre != "" && tienda != "") {
-                          print(" ${valorDrop} - ${_tiendas[indiceTienda]['id']}");
+                          //TODO Validar y mandar a base de datos
+                          if (nombre != "" && tienda != "") {
+                            print(_tiendas[indiceTienda]['id']);
+                          }
                         }
-                      }
+                      });
                     },
                     style:
                         ElevatedButton.styleFrom(foregroundColor: colorBoton),
                     child: const Text("Submit"),
                   ),
-                  Text(num.toString()),
+
+                  Text(t.indexOf(valorDrop).toString()),
+
+                  Text(indiceTienda == -1 ? "-1" : _tiendas[indiceTienda]['id'].toString()),
+                  Text(indiceTienda.toString()),
                 ],
               ),
             ),

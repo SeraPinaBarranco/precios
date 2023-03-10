@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:precios/model/db.dart';
 import 'package:precios/model/tienda.dart';
 
@@ -45,11 +46,13 @@ class _TiendasListState extends State<TiendasList> {
           itemBuilder: ((context, i) {
             return ListTile(
                 leading: Icon(Icons.shopping_bag_outlined,
-                    color: (i % 2) == 0 ? Colors.white : Colors.white30),
-                title: Text(
+                  color: (i % 2) == 0 ? Colors.white : Colors.white30),
+                  title: Text(
                   _tiendas[i]['nombre'],
                   style: const TextStyle(color: Colors.white),
-                ));
+                  ),
+                onTap: () => {},
+                );
             
           })),
     );
