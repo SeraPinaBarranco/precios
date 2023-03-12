@@ -11,9 +11,9 @@ class DB {
     String tablaProductos = """CREATE TABLE "productos" (
                                 "id"	INTEGER,
                                 "nombre"	TEXT,
+                                "precio"	INTEGER,
+                                "fecha" TEXT,
                                 "tienda"	INTEGER,
-                              "precio"	INTEGER,
-                              "fecha" TEXT
                               PRIMARY KEY("id" AUTOINCREMENT),
                               FOREIGN KEY("id") REFERENCES "tienda"("id")
                             )""";
@@ -23,7 +23,7 @@ class DB {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('productos.db', version: 2,
+    return sql.openDatabase('productos.db', version: 3,
         onCreate: (sql.Database database, version) async {
       await createTables(database);
     });
@@ -40,7 +40,7 @@ class DB {
    static Future<int> crearProducto(String nombre, double precio, String fecha, int tienda) async {
     final db = await DB.db();
     final data = {'nombre': nombre, 'precio': precio, 'fecha': fecha, 'tienda': tienda};
-    final idR = await db.insert('tienda', data,
+    final idR = await db.insert('productos', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return idR;
   }
