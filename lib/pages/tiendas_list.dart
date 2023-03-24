@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:precios/model/db.dart';
-import 'package:precios/model/tienda.dart';
+// import 'package:precios/model/tienda.dart';
 
-import 'package:precios/provider/tienda_provider.dart';
-import 'package:provider/provider.dart';
+// import 'package:precios/provider/tienda_provider.dart';
+// import 'package:provider/provider.dart';
 
 import '../themes/themes.dart';
 

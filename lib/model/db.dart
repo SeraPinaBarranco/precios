@@ -6,6 +6,7 @@ class DB {
     String tablaTiendas = """CREATE TABLE "tienda" (
                                 "id"	INTEGER,
                                 "nombre"	TEXT,
+                                "imagen"  TEXT,
                                 PRIMARY KEY("id" AUTOINCREMENT)
                               )""";
     String tablaProductos = """CREATE TABLE "productos" (
@@ -23,23 +24,30 @@ class DB {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('productos.db', version: 3,
+    return sql.openDatabase('productos.db', version: 4,
         onCreate: (sql.Database database, version) async {
       await createTables(database);
     });
   }
 
-  static Future<int> crearTienda(/*int? id,*/ String nombre) async {
+  static Future<int> crearTienda(
+      /*int? id,*/ String nombre, String? imagen) async {
     final db = await DB.db();
-    final data = {'nombre': nombre};
+    final data = {'nombre': nombre, 'imagen': imagen};
     final idR = await db.insert('tienda', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return idR;
   }
 
-   static Future<int> crearProducto(String nombre, double precio, String fecha, int tienda) async {
+  static Future<int> crearProducto(
+      String nombre, double precio, String fecha, int tienda) async {
     final db = await DB.db();
-    final data = {'nombre': nombre, 'precio': precio, 'fecha': fecha, 'tienda': tienda};
+    final data = {
+      'nombre': nombre,
+      'precio': precio,
+      'fecha': fecha,
+      'tienda': tienda
+    };
     final idR = await db.insert('productos', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return idR;
@@ -50,8 +58,22 @@ class DB {
     return db.query('tienda');
   }
 
+  static Future<List<Map<String, dynamic>>> getTienda(int id) async {
+    final db = await DB.db();
+    return db.query('tienda', where: 'id=?', whereArgs: [id]);
+  }
+
+  static Future<int> deleteTienda(int id) async {
+    final db = await DB.db();
+    return db.delete('tienda', where: 'id = ?', whereArgs: [id]);
+  }
   
+  static Future<int> deleteAllTiendas () async{
+    final db = await DB.db();
+    return db.delete('tienda');
+  }
 }
+
 
 // import 'dart:async';
 

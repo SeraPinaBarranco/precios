@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:precios/model/db.dart';
 import 'package:precios/model/tienda.dart';
 import 'package:precios/provider/tienda_provider.dart';
+import 'package:precios/ui/custom_drawer.dart';
 import 'package:precios/ui/input_decorations.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,14 @@ class FrmTienda extends StatefulWidget {
 class _FrmTiendaState extends State<FrmTienda> {
   final _formKey = GlobalKey<FormState>();
   String nombre = "";
+  String imagen = "";
 
   @override
   Widget build(BuildContext context) {
+    final TiendaProvider tiendaProvider = Provider.of<TiendaProvider>(context);
+
     return Scaffold(
+      drawer: const CustomDrawer(),
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           titleTextStyle: scaffoldTheme,
@@ -53,21 +58,42 @@ class _FrmTiendaState extends State<FrmTienda> {
                 const SizedBox(
                   height: 20,
                 ),
+                TextFormField(
+                  onChanged: (value) => imagen = value,
+                  // validator: (value) {
+                  //   if (value!.isEmpty) {
+                  //     return "El campo no puede estar vacio!";
+                  //   } else {
+                  //     nombre = value;
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: InputDecorations.textFormFieldID(
+                      hintText: "Pegar Imagen", labelText: "Url imagen:"),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final snackbar = SnackBar(
-                        content: const Text("Validando datos!!"),
-                        duration: const Duration(seconds: 5),
-                        backgroundColor: const Color.fromARGB(3, 233, 233, 153),
-                        action: SnackBarAction(label: 'Ir al listado', onPressed: () => Navigator.pushNamed(context, 'tiendas'),)
-                      );
+                          content: const Text("Validando datos!!"),
+                          duration: const Duration(seconds: 5),
+                          backgroundColor:
+                              const Color.fromARGB(3, 233, 233, 153),
+                          action: SnackBarAction(
+                            label: 'Ir al listado',
+                            onPressed: () => Navigator.pushReplacementNamed(
+                                context, 'tiendas'),
+                          ));
 
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      ;
+
                       //TODO Validar y mandar a base de datos
                       if (nombre != "") {
-                        DB.crearTienda(nombre);
+                        //DB.crearTienda(nombre, imagen);
+                        tiendaProvider.nuevaTienda(nombre, imagen);
                       }
                     }
                   },

@@ -29,14 +29,16 @@ class ProductosProvider extends ChangeNotifier {
   get getPrecio => _precio;
 
   bool isValidForm() {
-    print(formKey.currentState?.validate());
+    
 
     return formKey.currentState?.validate() ?? false;
   }
 
   Future setTiendas() async {
     tiendas = await DB.getTiendas();
-    _valorCombo = tiendas[0]['nombre'];
+
+    tiendas.isNotEmpty ? _valorCombo = tiendas[0]['nombre'] :_valorCombo = "";  
+    //_valorCombo = tiendas[0]['nombre'] ?? "";
     //print("SET");
     //print(tiendas);
     notifyListeners();

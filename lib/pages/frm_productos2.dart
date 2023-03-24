@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:precios/provider/productos_provider.dart';
+import 'package:precios/ui/custom_drawer.dart';
 import 'package:precios/ui/input_decorations.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class FrmProductos2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         titleTextStyle: scaffoldTheme,
