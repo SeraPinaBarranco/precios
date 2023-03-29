@@ -22,7 +22,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           Container(
             height: 2400,
-            color: Colors.blue,
+            color: Theme.of(context).backgroundColor,
             child: Column(
               children: [
                 const ListTile(

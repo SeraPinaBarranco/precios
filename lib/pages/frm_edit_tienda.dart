@@ -15,14 +15,13 @@ class FrmEditTienda extends StatelessWidget {
         Provider.of<TiendaProvider>(context, listen: false);
     //tiendaProvider.cargarTienda(tiendaProvider.getIdTienda);
     final id = tiendaProvider.getIdTienda;
-    print("update");
-    print(tiendaProvider.getIdTienda);
 
-    var t = tiendaProvider.getAllTiendas
-        .where(
-          (element) => element['id'] == id,
-        )
-        .toList();
+    List<Map<String, dynamic>> t = tiendaProvider.cargatTienda2(id);
+
+    tiendaProvider.setNombreTienda = "";
+    tiendaProvider.setNombreImagen = "";
+    tiendaProvider.isEditN(false);
+    tiendaProvider.isEditI(false);
 
     return Scaffold(
         drawer: const CustomDrawer(),
@@ -44,7 +43,12 @@ class FrmEditTienda extends StatelessWidget {
                 ),
                 TextFormField(
                   initialValue: t[0]['nombre'],
-                  //onChanged: (value) => nombre = value,
+                  onChanged: (value) {
+                    value.isEmpty
+                        ? tiendaProvider.isEditN(false)
+                        : tiendaProvider.isEditN(true);
+                    tiendaProvider.setNombreTienda = value.toUpperCase().trim();
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "El campo no puede estar vacio!";
@@ -59,15 +63,36 @@ class FrmEditTienda extends StatelessWidget {
                 ),
                 TextFormField(
                   initialValue: t[0]['imagen'],
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    value.isEmpty
+                        ? tiendaProvider.isEditI(false)
+                        : tiendaProvider.isEditI(true);
+                    tiendaProvider.setNombreImagen = value.trim();
+                  },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print(t[0]['nombre']);
-                    //tiendaProvider.getTienda(tiendaProvider.getIdTienda);
+                    /* Si el nombre no está cambiado poner el nombre de initialValue */
+                    if (!tiendaProvider.getIsEditNombre) {
+                      tiendaProvider.setNombreTienda = t[0]['nombre'];
+                    }
+                    /* Si la imagen no está cambiado poner el nombre de initialValue */
+                    if (!tiendaProvider.getIsEditImagen) {
+                      tiendaProvider.setNombreImagen = t[0]['imagen'];
+                    }
+
+                    // TODO ACTUALIZAR TIENDA
+                    tiendaProvider.updateTienda(t[0]['id'],
+                        tiendaProvider.getNombre, tiendaProvider.getImagen);
+
+
+                    tiendaProvider.isEditN(false);
+                    tiendaProvider.isEditI(false);
+                    // VOLVER AL LISTADO
+                    Navigator.pushReplacementNamed(context, 'tiendas');
                   },
                   style: ElevatedButton.styleFrom(foregroundColor: colorBoton),
                   child: const Text("Submit"),

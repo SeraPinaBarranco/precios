@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:precios/provider/tienda_provider.dart';
@@ -34,6 +35,15 @@ class TiendasList2 extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // CachedNetworkImage(
+                    //   placeholder: (context, url) => const CircularProgressIndicator() ,  
+                    //   imageUrl: 'https://via.placeholder.com/300x300',
+                    //   fit: BoxFit.cover,
+                    //   width: 50,
+                    //   height: 50,
+                      
+                    // ),
+                    
                     Image.network(
                       tiendas[index]['imagen'],
                       fit: BoxFit.cover,
@@ -41,7 +51,7 @@ class TiendasList2 extends StatelessWidget {
                       height: 100,
                       errorBuilder: (context, error, stackTrace) {
                         //return const Text("ERRRO");
-                        return Image.asset(
+                        return  Image.asset(
                           "assets/loading-jar.png",
                           width: 100,
                           height: 100,

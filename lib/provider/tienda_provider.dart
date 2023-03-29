@@ -10,6 +10,15 @@ class TiendaProvider with ChangeNotifier {
   Map<String, dynamic> _tienda = {};
   //Tienda? _tiendaObj = null;
 
+  bool _isEditNombre = false;
+  bool _isEditImagen = false;
+
+  isEditN(bool s) => _isEditNombre = s;
+  isEditI(bool s) => _isEditImagen = s;
+
+  get getIsEditNombre => _isEditNombre;
+  get getIsEditImagen => _isEditImagen;
+
   int _idTienda = -1;
 
   // TiendaProvider() {
@@ -21,6 +30,9 @@ class TiendaProvider with ChangeNotifier {
   Map<String, dynamic> get getTienda => _tienda;
   String get getImagen => _imagen;
   int get getIdTienda => _idTienda;
+
+  set setNombreTienda(String n) => _nombre = n;
+  set setNombreImagen(String n) => _imagen = n;
 
   void idT(int id) {
     _idTienda = id;
@@ -42,7 +54,17 @@ class TiendaProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setNombre(String n, String? im) {
+  List<Map<String, dynamic>> cargatTienda2(int id) {
+    return [
+      ..._tiendasList
+          .where(
+            (element) => element['id'] == id,
+          )
+          .toList()
+    ];
+  }
+
+  setTienda(String n, String? im) {
     _nombre = n;
     _imagen = im ?? "";
     Tienda(nombre: n, imagen: im);
@@ -54,6 +76,12 @@ class TiendaProvider with ChangeNotifier {
     int resp = await DB.crearTienda(n, t);
 
     cargasrTiendas();
+  }
+
+  Future<int> updateTienda(id, nombre, imagen) async {
+    int resp = await DB.actualizarTienda(id, nombre, imagen);
+    cargasrTiendas();
+    return resp;
   }
 
   borrarTienda(int id) {

@@ -25,17 +25,24 @@ class FrmProductos2 extends StatelessWidget {
           create: (_) {
             ProductosProvider();
           },
-          child: ProductsForm()),
+          child: const ProductsForm()),
     );
   }
 }
 
-class ProductsForm extends StatelessWidget {
+class ProductsForm extends StatefulWidget {
   const ProductsForm({super.key});
 
   @override
+  State<ProductsForm> createState() => _ProductsFormState();
+}
+
+class _ProductsFormState extends State<ProductsForm> {
+  @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<ProductosProvider>(context);
+    String nombre = "";
+    String precio = "";
 
     formProvider.setTiendas();
 
@@ -49,14 +56,16 @@ class ProductsForm extends StatelessWidget {
             children: [
               //*CAMPO NOMBRE
               TextFormField(
+                  textCapitalization: TextCapitalization.characters,
                   autovalidateMode: AutovalidateMode.always,
-                  onChanged: (value) => formProvider.setNombre(value),
+                  onChanged: (value) => formProvider.setNombre(value.trim()),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "El campo no puede estar vacio!";
                     }
                     return null;
                   },
+                  onFieldSubmitted: (value) => print(value),
                   decoration: InputDecorations.textFormFieldID(
                       hintText: "Nombre producto",
                       labelText: "Producto",
@@ -64,6 +73,7 @@ class ProductsForm extends StatelessWidget {
 
               //*CAMPO PRECIO
               TextFormField(
+                  
                   autovalidateMode: AutovalidateMode.always,
                   onChanged: (value) => value.isNotEmpty
                       ? formProvider.setPrecio(double.parse(value))
@@ -85,49 +95,26 @@ class ProductsForm extends StatelessWidget {
                 onChanged: (value) {
                   formProvider.setValorCombo(value.toString());
                   formProvider.valorCombo = value.toString();
-                  print(formProvider.getValorCombo());
+                  //print(formProvider.getValorCombo());
                 },
                 items: formProvider.getTiendas().map((e) {
                   return DropdownMenuItem(
-                      value: e['id'], child: Text(e['nombre']));
+                      value: e['id'] ?? -1, child: Text(e['nombre']));
                 }).toList(),
               ),
 
-              //LISTADO TIENDAS
-              /*DropdownButton(
-                onChanged: (value) {
-                  formProvider.setValorCombo(value);
-                  //print(formProvider.valorCombo);
-                },
-                icon: const Icon(Icons.shopify),
-                hint: const Text("Tienda"),
-                // ignore: unnecessary_null_comparison
-                value: formProvider.getValorCombo(),
-                items: formProvider.getTiendas().map<DropdownMenuItem>((e) {
-                  return DropdownMenuItem(
-                      value: e['nombre'], child: Text(e['nombre']));
-                }).toList(),
-
-                style: const TextStyle(fontSize: 20, color: Colors.indigo),
-                isExpanded: true,
-              ),*/
-
-              //Text(formProvider.tiendas[2]['nombre']),
-
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (formProvider.isValidForm()) {
-                    //print("Guardar en BBDD");
-                    //print(formProvider.tiendas);
-                    //for (var i = 0; i < formProvider.tiendas.length; i++) {
-                    //  print(formProvider.tiendas[i]['nombre']);
+                    final resp = await formProvider.grabarProducto(
+                        nombre: formProvider.getNombre,
+                        precio: formProvider.getPrecio,
+                        tienda: int.parse(formProvider.valorCombo));
+                    //if (resp == 1) {
+                    formProvider.setNombre("");
+                    
+                    formProvider.formKey.currentState!.reset();
                     //}
-                    //print("${formProvider.valorCombo} - ${formProvider.getNombre} - ${formProvider.getPrecio} ");
-                    formProvider.grabarProducto(nombre: formProvider.getNombre, precio: formProvider.getPrecio, tienda: int.parse(formProvider.valorCombo));
-                    // formProvider.tiendas.map((tienda) =>
-                    //   print(tienda)
-                    // ).toList();
-                    //Timer(const Duration(seconds: 3), ()=> Navigator.pushReplacementNamed(context, 'tiendas'));
                   } else {
                     return;
                   }

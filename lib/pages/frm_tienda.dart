@@ -48,7 +48,7 @@ class _FrmTiendaState extends State<FrmTienda> {
                     if (value!.isEmpty) {
                       return "El campo no puede estar vacio!";
                     } else {
-                      nombre = value;
+                      nombre = value.toUpperCase();
                     }
                     return null;
                   },
@@ -59,7 +59,7 @@ class _FrmTiendaState extends State<FrmTienda> {
                   height: 20,
                 ),
                 TextFormField(
-                  onChanged: (value) => imagen = value,
+                  onChanged: (value) => imagen = value.toLowerCase(),
                   // validator: (value) {
                   //   if (value!.isEmpty) {
                   //     return "El campo no puede estar vacio!";

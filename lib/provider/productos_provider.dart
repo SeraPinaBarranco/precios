@@ -7,6 +7,7 @@ class ProductosProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<Map<String, dynamic>> tiendas = [];
+  List<Map<String, dynamic>> _productosList = [];
 
   String valorCombo = "";
   String _valorCombo = "";
@@ -14,8 +15,19 @@ class ProductosProvider extends ChangeNotifier {
   String _nombre = "";
   double _precio = 0;
 
+  get getNombre => _nombre;
+  get getPrecio => _precio;
+
+  List<Map<String, dynamic>> get getProductos {
+    print(_productosList);
+    return _productosList;
+  }
+
+  initialValueNombre() {}
+
   setNombre(String nombreProducto) {
     _nombre = nombreProducto;
+    //notifyListeners();
     //print("PROVIDER $nombre");
   }
 
@@ -25,23 +37,25 @@ class ProductosProvider extends ChangeNotifier {
     //print("PROVIDER $nombre");
   }
 
-  get getNombre => _nombre;
-  get getPrecio => _precio;
-
   bool isValidForm() {
-    
-
     return formKey.currentState?.validate() ?? false;
   }
 
   Future setTiendas() async {
     tiendas = await DB.getTiendas();
 
-    tiendas.isNotEmpty ? _valorCombo = tiendas[0]['nombre'] :_valorCombo = "";  
+    tiendas.isNotEmpty ? _valorCombo = tiendas[0]['nombre'] : _valorCombo = "";
     //_valorCombo = tiendas[0]['nombre'] ?? "";
     //print("SET");
     //print(tiendas);
     notifyListeners();
+  }
+
+  cargarProductos() async {
+    final p = await DB.getProductos();
+    _productosList = p;
+
+    //notifyListeners();
   }
 
   List<Map<String, dynamic>> getTiendas() {
@@ -57,13 +71,13 @@ class ProductosProvider extends ChangeNotifier {
     return _valorCombo;
   }
 
-  void grabarProducto(
+  Future<int> grabarProducto(
       {required String nombre,
       required double precio,
       required int tienda}) async {
     String fecha =
         "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
     int res = await DB.crearProducto(nombre, precio, fecha, tienda);
-    print(res);
+    return res;
   }
 }

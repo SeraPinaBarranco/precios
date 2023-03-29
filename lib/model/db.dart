@@ -39,6 +39,15 @@ class DB {
     return idR;
   }
 
+  static Future<int> actualizarTienda(
+      int id, String nombre, String? imagen) async {
+    final db = await DB.db();
+    final data = {'id': id,'nombre': nombre, 'imagen': imagen};
+    final idR = await db.update('tienda', data, where: "id = ?", whereArgs: [id] ,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return idR;
+  }
+
   static Future<int> crearProducto(
       String nombre, double precio, String fecha, int tienda) async {
     final db = await DB.db();
@@ -72,6 +81,12 @@ class DB {
     final db = await DB.db();
     return db.delete('tienda');
   }
+
+   static Future<List<Map<String, dynamic>>> getProductos() async {
+    final db = await DB.db();
+    return db.query('productos');
+  }
+
 }
 
 
