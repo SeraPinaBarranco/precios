@@ -26,76 +26,80 @@ class TiendasList2 extends StatelessWidget {
           titleTextStyle: scaffoldTheme,
           centerTitle: true,
         ),
-        body: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(tiendas.length, (index) {
-            return Card(
-                elevation: 0,
-                color: Colors.lime[900],
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // CachedNetworkImage(
-                    //   placeholder: (context, url) => const CircularProgressIndicator() ,  
-                    //   imageUrl: 'https://via.placeholder.com/300x300',
-                    //   fit: BoxFit.cover,
-                    //   width: 50,
-                    //   height: 50,
-                      
-                    // ),
-                    
-                    Image.network(
-                      tiendas[index]['imagen'],
-                      fit: BoxFit.cover,
-                      width: 100,
-                      height: 100,
-                      errorBuilder: (context, error, stackTrace) {
-                        //return const Text("ERRRO");
-                        return  Image.asset(
-                          "assets/loading-jar.png",
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return GridView.count(
+              crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+              children: List.generate(tiendas.length, (index) {
+                return Card(
+                    elevation: 0,
+                    color: Colors.lime[900],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // CachedNetworkImage(
+                        //   placeholder: (context, url) => const CircularProgressIndicator() ,
+                        //   imageUrl: 'https://via.placeholder.com/300x300',
+                        //   fit: BoxFit.cover,
+                        //   width: 50,
+                        //   height: 50,
+
+                        // ),
+
+                        Image.network(
+                          tiendas[index]['imagen'],
+                          fit: BoxFit.cover,
                           width: 100,
                           height: 100,
-                        );
-                      },
-                    ),
-                    Center(
-                      child: Text(tiendas[index]['nombre']),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                          //* EDIT BUTTON
-                          onPressed: () {
-                            //tiendasProvider.cargarTienda(tiendas[index]['id']);
-                            tiendasProvider.idT(tiendas[index]['id']);
-                            
-                            // tiendasProvider.idT(tiendas[index]['id']);
-                            Navigator.pushReplacementNamed(
-                                context, 'actualizar_tienda');
+                          errorBuilder: (context, error, stackTrace) {
+                            //return const Text("ERRRO");
+                            return Image.asset(
+                              "assets/loading-jar.png",
+                              width: 100,
+                              height: 100,
+                            );
                           },
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
                         ),
-                        ElevatedButton(
-                          //* DELETE BUTTON
-                          onLongPress: () => tiendasProvider
-                              .borrarTienda(tiendas[index]['id']),
-                          onPressed: () {},
-                          child: IconButton(
-                              onPressed: (() {}),
-                              icon: const Icon(
-                                Icons.delete_forever_outlined,
+                        Center(
+                          child: Text(tiendas[index]['nombre']),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton(
+                              //* EDIT BUTTON
+                              onPressed: () {
+                                //tiendasProvider.cargarTienda(tiendas[index]['id']);
+                                tiendasProvider.idT(tiendas[index]['id']);
+
+                                // tiendasProvider.idT(tiendas[index]['id']);
+                                Navigator.pushReplacementNamed(
+                                    context, 'actualizar_tienda');
+                              },
+                              child: const Icon(
+                                Icons.edit,
                                 color: Colors.white,
-                              )),
-                        ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              //* DELETE BUTTON
+                              onLongPress: () => tiendasProvider
+                                  .borrarTienda(tiendas[index]['id']),
+                              onPressed: () {},
+                              child: IconButton(
+                                  onPressed: (() {}),
+                                  icon: const Icon(
+                                    Icons.delete_forever_outlined,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
-                ));
-          }),
+                    ));
+              }),
+            );
+          },
         ));
   }
 }

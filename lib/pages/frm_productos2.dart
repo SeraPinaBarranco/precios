@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+
 import 'package:precios/provider/productos_provider.dart';
 import 'package:precios/ui/custom_drawer.dart';
 import 'package:precios/ui/input_decorations.dart';
@@ -8,12 +7,25 @@ import 'package:provider/provider.dart';
 
 import '../themes/scaffold_text_style.dart';
 
+final lista = [
+  'Pollo',
+  'Ternera',
+  'Cerdo',
+  'Conejo',
+  'Verduras',
+  'Pescado',
+  'Yogures',
+  'Leche',
+  'Envasados'
+];
+
 class FrmProductos2 extends StatelessWidget {
   const FrmProductos2({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: const CustomDrawer(),
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -40,6 +52,8 @@ class ProductsForm extends StatefulWidget {
 class _ProductsFormState extends State<ProductsForm> {
   @override
   Widget build(BuildContext context) {
+    final c = [...lista];
+
     final formProvider = Provider.of<ProductosProvider>(context);
     String nombre = "";
     String precio = "";
@@ -73,7 +87,6 @@ class _ProductsFormState extends State<ProductsForm> {
 
               //*CAMPO PRECIO
               TextFormField(
-                  
                   autovalidateMode: AutovalidateMode.always,
                   onChanged: (value) => value.isNotEmpty
                       ? formProvider.setPrecio(double.parse(value))
@@ -90,6 +103,10 @@ class _ProductsFormState extends State<ProductsForm> {
                       labelText: "Precio \$",
                       prefixIcon: Icons.monetization_on)),
 
+              const SizedBox(
+                height: 20,
+              ),
+
               //LISTADO TIENDAS
               DropdownButtonFormField(
                 onChanged: (value) {
@@ -103,16 +120,38 @@ class _ProductsFormState extends State<ProductsForm> {
                 }).toList(),
               ),
 
+              const SizedBox(
+                height: 20,
+              ),
+
+              //LISTADO CATEGORIAS
+              DropdownButtonFormField(
+                onChanged: (value) {
+                  formProvider.setCategoria(value ?? "Sin categoria");
+                },
+                items: c.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
+
               ElevatedButton(
                 onPressed: () async {
                   if (formProvider.isValidForm()) {
                     final resp = await formProvider.grabarProducto(
                         nombre: formProvider.getNombre,
                         precio: formProvider.getPrecio,
+                        categoria: formProvider.getCategoria,
                         tienda: int.parse(formProvider.valorCombo));
                     //if (resp == 1) {
                     formProvider.setNombre("");
-                    
+
                     formProvider.formKey.currentState!.reset();
                     //}
                   } else {

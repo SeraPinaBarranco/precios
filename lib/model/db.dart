@@ -6,13 +6,14 @@ class DB {
     String tablaTiendas = """CREATE TABLE "tienda" (
                                 "id"	INTEGER,
                                 "nombre"	TEXT,
-                                "imagen"  TEXT,
+                                "imagen"  TEXT,                                
                                 PRIMARY KEY("id" AUTOINCREMENT)
                               )""";
     String tablaProductos = """CREATE TABLE "productos" (
                                 "id"	INTEGER,
                                 "nombre"	TEXT,
                                 "precio"	INTEGER,
+                                "categoria" TEXT,
                                 "fecha" TEXT,
                                 "tienda"	INTEGER,
                               PRIMARY KEY("id" AUTOINCREMENT),
@@ -24,7 +25,7 @@ class DB {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('productos.db', version: 4,
+    return sql.openDatabase('productos.db', version: 5,
         onCreate: (sql.Database database, version) async {
       await createTables(database);
     });
@@ -49,13 +50,14 @@ class DB {
   }
 
   static Future<int> crearProducto(
-      String nombre, double precio, String fecha, int tienda) async {
+      String nombre, double precio, String fecha, String? categoria, int tienda) async {
     final db = await DB.db();
     final data = {
-      'nombre': nombre,
-      'precio': precio,
-      'fecha': fecha,
-      'tienda': tienda
+      'nombre'   : nombre,
+      'precio'   : precio,
+      'fecha'    : fecha,
+      'categoria':categoria,
+      'tienda'   : tienda
     };
     final idR = await db.insert('productos', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);

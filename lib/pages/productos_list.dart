@@ -10,28 +10,40 @@ class ProductosList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productosProvider = Provider.of<ProductosProvider>(context);
-    productosProvider.cargarProductos();
+    final productosProvider =
+        Provider.of<ProductosProvider>(context);
+    //productosProvider.cargarProductos();
 
-    //final productos = productosProvider.getProductos;
-
-    //print(productos);
+    List<Map<String, dynamic>> productos = Provider.of<ProductosProvider>(context, listen: true).getProductos;
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Listado de tiendas 2"),
+          title: const Text("Listado de productos"),
           titleTextStyle: scaffoldTheme,
           centerTitle: true,
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         drawer: const CustomDrawer(),
+
         body: ListView.builder(
           itemCount: productosProvider.getProductos.length,
           itemBuilder: (context, index) {
-            //TODO Construir list tile
-            return const Text("data");
+            
+            //TODO Construir Dismissible
+            return Dismissible(
+              background: Container(color: Colors.lime.shade400),
+              key: ValueKey(productos[index]),
+                child: ListTile(
+                  title: Text(productos[index]['nombre']),
+                  subtitle: Text(productos[index]['precio'].toString()),
+                  leading: Text(productos[index]['categoria'] ?? "" ),
+              ),
+              onDismissed: (direction) => print(productos[index]['id']),
+              );
           },
         ),
+
+
         floatingActionButton: ElevatedButton(
           onPressed: () {
             print(productosProvider.getProductos);

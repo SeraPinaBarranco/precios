@@ -3,24 +3,33 @@ import 'package:precios/model/db.dart';
 
 class ProductosProvider extends ChangeNotifier {
   //final db = DB.db();
+  ProductosProvider() {
+    cargarProductos();
+  }
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<Map<String, dynamic>> tiendas = [];
-  List<Map<String, dynamic>> _productosList = [];
+  List<Map<String, dynamic>> productosList = [];
 
   String valorCombo = "";
   String _valorCombo = "";
 
   String _nombre = "";
   double _precio = 0;
+  String _categoria = "";
 
   get getNombre => _nombre;
   get getPrecio => _precio;
+  get getCategoria => _categoria;
+
+  setCategoria(String c) {
+    _categoria = c;
+  }
 
   List<Map<String, dynamic>> get getProductos {
-    print(_productosList);
-    return _productosList;
+    print(productosList);
+    return productosList;
   }
 
   initialValueNombre() {}
@@ -53,9 +62,9 @@ class ProductosProvider extends ChangeNotifier {
 
   cargarProductos() async {
     final p = await DB.getProductos();
-    _productosList = p;
+    productosList = p;
 
-    //notifyListeners();
+    notifyListeners();
   }
 
   List<Map<String, dynamic>> getTiendas() {
@@ -74,10 +83,12 @@ class ProductosProvider extends ChangeNotifier {
   Future<int> grabarProducto(
       {required String nombre,
       required double precio,
+      String? categoria,
       required int tienda}) async {
     String fecha =
         "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
-    int res = await DB.crearProducto(nombre, precio, fecha, tienda);
+    int res = await DB.crearProducto(nombre, precio, fecha, categoria, tienda);
+    cargarProductos();
     return res;
   }
 }
